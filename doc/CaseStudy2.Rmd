@@ -1,0 +1,187 @@
+---
+title: "Case Study2"
+author: "Venkat Kasarla"
+date: "11/23/2017"  
+output: 
+    html_document:
+          keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("readxl")
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r 0}
+rawdata.xls <- '../data/CaseStudy2-data.xlsx'
+rawdata.csv <- '../data/original.csv'
+
+
+refine <- read_excel(rawdata.xls,1)
+refine %>% data.table::fwrite(rawdata.csv)
+dframe <- read.csv(rawdata.csv)
+rawdata <- dframe
+```
+
+<br>
+
+```{r 1}
+ggplot(rawdata,aes(Gender,fill=Attrition)) + geom_bar(position="dodge")
+ggplot(rawdata,aes(Gender, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Gender")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+```
+
+<br>
+
+```{r 2}
+ggplot(rawdata,aes(HourlyRate,fill=Attrition)) + geom_bar(position="dodge")
+ggplot(rawdata,aes(HourlyRate, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5,check_overlap = TRUE)+
+  labs(y="Percent",fill="HourlyRate")+
+  scale_y_continuous(labels=scales::percent)+
+  
+  facet_grid(~Attrition)
+```
+
+<br>
+
+```{r 3}
+ggplot(rawdata,aes(JobInvolvement,fill=Attrition)) + geom_bar(position="dodge")
+ggplot(rawdata,aes(JobInvolvement, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="JobInvolvement")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+```
+
+<br>
+
+```{r 4}
+ggplot(rawdata,aes(JobLevel,fill=Attrition)) + geom_bar(position="dodge")
+ggplot(rawdata,aes(JobLevel, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="JobLevel")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+```
+
+<br>
+
+```{r 5}
+ggplot(rawdata,aes(JobRole,fill=Attrition)) + geom_bar(position="dodge")
+ggplot(rawdata,aes(JobRole, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="JobRole")+
+  scale_y_continuous(labels=scales::percent)+
+  theme(axis.text.x = element_text(angle=60, hjust=1)) +
+  facet_grid(~Attrition)
+```
+
+<br>
+
+```{r 6}
+ggplot(rawdata,aes(JobSatisfaction,fill=Attrition)) + geom_bar(position="dodge")
+ggplot(rawdata,aes(JobSatisfaction, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="JobSatisfaction")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+```
+
+<br>
+
+```{r 7}
+ggplot(rawdata,aes(MaritalStatus,fill=Attrition)) + geom_bar(position="dodge")
+ggplot(rawdata,aes(MaritalStatus, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="MaritalStatus")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+```
+
+<br>
+
+```{r 8}
+f <- function(x) {
+  r <- quantile(x, probs = c(0.05, 0.25, 0.5, 0.75, 0.95))
+  names(r) <- c("ymin", "lower", "middle", "upper", "ymax")
+  r
+}
+
+ggplot(rawdata, aes(Attrition, MonthlyRate)) + stat_summary(fun.data = f, geom="boxplot")
+
+# define outlier as you want 0-25%  and 75-100% outliers   
+o <- function(x) {
+  subset(x, x < quantile(x)[2] | quantile(x)[4] < x)
+}
+
+#Monthly Rate
+ggplot(rawdata, aes(Attrition, MonthlyRate)) + 
+  stat_summary(fun.data=f, geom="boxplot") + 
+  stat_summary(fun.y = o, geom="point")
+
+#Hourly Rate
+ggplot(rawdata, aes(Attrition, HourlyRate)) + 
+  stat_summary(fun.data=f, geom="boxplot") + 
+  stat_summary(fun.y = o, geom="point")
+
+```
+
+<br>
+
+```{r 9}
+#Monthly Income
+ggplot(rawdata, aes(Attrition, MonthlyIncome)) + 
+  stat_summary(fun.data=f, geom="boxplot") + 
+  stat_summary(fun.y = o, geom="point")
+```
+
+<br>
+
+```{r 10}
+ggplot(rawdata,aes(NumCompaniesWorked,fill=Attrition)) + geom_bar(position="dodge")
+ggplot(rawdata,aes(NumCompaniesWorked, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="NumCompaniesWorked")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+```
+
+<br>
+
+```{r 11}
+ggplot(rawdata,aes(Over18,fill=Attrition)) + geom_bar(position="dodge")
+ggplot(rawdata,aes(Over18, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Over18")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+```
+
+<br>
+
+
