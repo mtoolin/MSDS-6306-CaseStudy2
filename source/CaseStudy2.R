@@ -15,7 +15,7 @@ yacmonthly.csv <- "data/yacmonthly2.csv"
 refine <- read_excel(rawdata.xls,1)
 View(refine)
 refine %>% data.table::fwrite(rawdata.csv)
-yacmonthly <- read.csv("yacmonthly.csv", stringsAsFactors = TRUE)
+yacmonthly <- read.csv(yacmonthly.csv, stringsAsFactors = TRUE, skip = 1)
 dframe <- read.csv(rawdata.csv)
 rawdata <- dframe
 
