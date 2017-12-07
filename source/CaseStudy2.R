@@ -9,11 +9,13 @@ library(stringr)
 
 rawdata.xls <- "data/CaseStudy2-data.xlsx"
 rawdata.csv <- "data/original.csv"
+yacmonthly.csv <- "data/yacmonthly2.csv"
 
 
 refine <- read_excel(rawdata.xls,1)
 View(refine)
 refine %>% data.table::fwrite(rawdata.csv)
+yacmonthly <- read.csv("yacmonthly.csv", stringsAsFactors = TRUE)
 dframe <- read.csv(rawdata.csv)
 rawdata <- dframe
 
