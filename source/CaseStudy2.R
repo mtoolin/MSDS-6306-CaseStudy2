@@ -15,7 +15,7 @@ library(stringr)
 
 rawdata.xls <- "data/CaseStudy2-data.xlsx"
 rawdata.csv <- "data/original.csv"
-yacmonthly.csv <- "data/yacmonthly2.csv"
+yacmonthly.csv <- "data/yacmonthly.csv"
 
 
 refine <- read_excel(rawdata.xls,1)
