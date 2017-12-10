@@ -3,19 +3,69 @@ library("readxl")
 library(tidyr)
 library(dplyr)
 library(ggplot2)
-
+library(scales)
 library(stringr)
-#load raw data from ~/data , save the data set as a CSV file called refine_original.csv and load it
+
+##########################################################
+#                                                        #
+# Load raw data from ~/data , save the data set as a CSV #
+# file called refine_original.csv and load it            #
+#                                                        #
+##########################################################
 
 rawdata.xls <- "data/CaseStudy2-data.xlsx"
 rawdata.csv <- "data/original.csv"
+yacmonthly.csv <- "data/yacmonthly2.csv"
 
 
 refine <- read_excel(rawdata.xls,1)
 View(refine)
 refine %>% data.table::fwrite(rawdata.csv)
+yacmonthly <- read.csv(yacmonthly.csv, stringsAsFactors = TRUE, skip = 1)
 dframe <- read.csv(rawdata.csv)
 rawdata <- dframe
+
+########################################################
+#                                                      #
+# Group some of the data together for better analysis  #
+#                                                      #
+########################################################
+
+#
+# Calculate Number Average years on Job vs Age based on quantiles
+#
+quantile (rawdata$Age)
+ma <- tapply(rawdata$YearsAtCompany, rawdata$Age, mean)
+madf<-data.frame(Age=names(ma),YearsWithCompany=ma)
+madf$AgeGroup = cut(as.numeric(madf$Age),c(0,12,19,26,43), 
+                    labels=c("18-29","30-36","37-43","44-60"))
+ma.mean <- tapply(madf$Age, madf$AgeGroup, mean)
+#
+# Income Gouping Code
+#
+quantie.val <- quantile(rawdata$MonthlyIncome)
+rawdata$IncomeGroup[rawdata$MonthlyIncome < quantie.val[1]] <- "Low"
+
+rawdata$IncomeGroup[rawdata$MonthlyIncome >= quantie.val[1] & 
+                    rawdata$MonthlyIncome < quantie.val[2]] <- "Low Medium"
+rawdata$IncomeGroup[rawdata$MonthlyIncome >= quantie.val[2] &
+                    rawdata$MonthlyIncome < quantie.val[3]] <- "Medium"
+rawdata$IncomeGroup[rawdata$MonthlyIncome >= quantie.val[3] &
+                    rawdata$MonthlyIncome < quantie.val[4]] <- "Medium High"
+rawdata$IncomeGroup[rawdata$MonthlyIncome >= quantie.val[4] & 
+                    rawdata$MonthlyIncome < quantie.val[5]] <- "High"
+					
+plot_data <- dframe %>% 
+group_by(Attrition, Gender) %>% 
+tally %>% 
+mutate(percent = n/sum(n)
+
+########################################################
+#                                                      #
+# Create all the charst needed for analysis            #
+# Not all charts will be used in the final report      #
+#                                                      #
+########################################################
 
 plot_data <- dframe %>% 
   group_by(Attrition, Gender) %>% 
@@ -183,5 +233,162 @@ ggplot(rawdata,aes(Over18, group=Attrition))+
   geom_text(aes(label=scales::percent(..prop..),
                 y=..prop..),stat="count",vjust=-.5)+
   labs(y="Percent",fill="Over18")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Overtime plot
+ggplot(rawdata,aes(OverTime, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Overtime")+
+  theme(axis.text.x = element_text(angle=0),
+        legend.position="none")+
+   scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Percent Salary Hike Plot
+ggplot(rawdata,aes(PercentSalaryHike, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="% Salary Hike")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Performance Rating Plot
+ggplot(rawdata,aes(PerformanceRating, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Perf Rating")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Relationship Satisfaction Plot
+ggplot(rawdata,aes(RelationshipSatisfaction, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Rel Sat")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Standard Hours Plot
+ggplot(rawdata,aes(StandardHours, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Standard Hours")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Stock Option Level Plot
+ggplot(rawdata,aes(StockOptionLevel, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Stock Level")+
+  theme(axis.text.x = element_text(angle=0),
+        legend.position="none")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Total working years plot
+ggplot(rawdata,aes(TotalWorkingYears, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Working Years")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Training time last year plot
+ggplot(rawdata,aes(TrainingTimesLastYear, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Training Time")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Work Life Balance plot
+ggplot(rawdata,aes(WorkLifeBalance, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Balance")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Years at Company Plot
+ggplot(rawdata,aes(YearsAtCompany, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5,check_overlap = TRUE)+
+  labs(y="Percent",fill="Years")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Years in current role Plot
+ggplot(rawdata,aes(YearsInCurrentRole, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Years")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Years Since last Promotion Plot
+ggplot(rawdata,aes(YearsSinceLastPromotion, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Years")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+# Years With Current Mananger Plot
+ggplot(rawdata,aes(YearsWithCurrManager, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Years")+
+  scale_y_continuous(labels=scales::percent)+
+  facet_grid(~Attrition)
+
+ggplot(data=rawdata,aes(Age,mean(YearsAtCompany)))+
+  geom_histogram(stat="identity")
+
+# Calculate Number Average years on Job vs Age
+ma <- tapply(rawdata$YearsAtCompany, rawdata$Age, mean)
+madf<-data.frame(Age=names(ma),YearsWithCompany=ma)
+madf$AgeGroup = cut(as.numeric(madf$Age),c(0,12,19,26,43), 
+                    labels=c("18-29","30-36","37-43","44-60"))
+
+# Plot Avg Years with Company vs Age
+ggplot(madf, aes(x=Age, y=YearsWithCompany, fill = AgeGroup)) +
+  geom_bar(stat ="identity",colour="black",position="dodge")+
+  labs(fill="Age",y="Avg Years With Company")
+
+# Calculate Avg years on job vs job role
+mjobrole <-tapply(rawdata$YearsAtCompany, rawdata$JobRole, mean)
+mjobrole.df <-data.frame(JobRole=names(mjobrole),YearsWithCompany=mjobrole)
+
+ggplot(mjobrole.df, aes(x=JobRole, y=YearsWithCompany,fill=JobRole)) +
+  geom_bar(stat ="identity",colour="black",position="dodge")+
+  labs(fill="Age",y="Avg Years With Company",x="Job Role")+
+  theme(axis.text.x = element_text(angle=60, hjust=1),
+        legend.position="none")+
+#  coord_polar("y",start=0)
+
+
+boxplot(quantile(cleandata$Age),col="red", horizontal = TRUE,xlab="Age")
+
+ggplot(rawdata,aes(IncomeGroup, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent",fill="Income Group")+
   scale_y_continuous(labels=scales::percent)+
   facet_grid(~Attrition)
