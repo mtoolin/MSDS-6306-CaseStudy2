@@ -48,7 +48,6 @@ ggplot(rawdata,aes(HourlyRate, group=Attrition))+
                 y=..prop..),stat="count",vjust=-.5,check_overlap = TRUE)+
   labs(y="Percent",fill="HourlyRate")+
   scale_y_continuous(labels=scales::percent)+
-  
   facet_grid(~Attrition)
 ```
 

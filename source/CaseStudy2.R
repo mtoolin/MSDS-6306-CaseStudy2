@@ -94,99 +94,87 @@ ggplot(rawdata, aes(x = Attrition)) +
     geom_text(aes(label = paste0(..y..*100,"%")), 
               position = position_stack(vjust = 0.5), size = 2)
 
-ggplot(rawdata,aes(Gender,fill=Attrition)) + geom_bar(position="dodge")
-ggplot(rawdata,aes(Gender, group=Attrition))+
-  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
-  geom_text(aes(label=scales::percent(..prop..),
-                y=..prop..),stat="count",vjust=-.5)+
-  labs(y="Percent",col="Gender")+
-  scale_y_continuous(labels=scales::percent)+
-  facet_grid(~Attrition)
+  # GendervsAttrition Summary
+  ggplot(rawdata,aes(Gender,fill=Attrition)) + geom_bar(position="dodge")
+  ggplot(rawdata,aes(Gender, group=Attrition))+
+    geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+    geom_text(aes(label=scales::percent(..prop..),
+                  y=..prop..),stat="count",vjust=-.5)+
+    labs(y="Percent")+
+    scale_y_continuous(labels=scales::percent)+
+    theme(axis.text.x = element_text(angle=0, hjust=1),legend.position="none")+
+    facet_grid(~Attrition)
 
+  # hourlyRateAttritionSummary Summary
 
-ggplot(rawdata,aes(HourlyRate,fill=Attrition)) + geom_bar(position="dodge")
-ggplot(rawdata,aes(HourlyRate, group=Attrition))+
-  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
-  geom_text(aes(label=scales::percent(..prop..),
-                y=..prop..),stat="count",vjust=-.5,check_overlap = TRUE)+
-  labs(y="Percent",fill="HourlyRate")+
-  scale_y_continuous(labels=scales::percent)+
-  facet_grid(~Attrition)
-
-
-ggplot(rawdata,aes(JobInvolvement,fill=Attrition)) + geom_bar(position="dodge")
-ggplot(rawdata,aes(JobInvolvement, group=Attrition))+
-  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
-  geom_text(aes(label=scales::percent(..prop..),
-                y=..prop..),stat="count",vjust=-.5)+
-  labs(y="Percent",fill="JobInvolvement")+
-  scale_y_continuous(labels=scales::percent)+
-  facet_grid(~Attrition)
-
-ggplot(rawdata,aes(JobLevel,fill=Attrition)) + geom_bar(position="dodge")
-ggplot(rawdata,aes(JobLevel, group=Attrition))+
-  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
-  geom_text(aes(label=scales::percent(..prop..),
-                y=..prop..),stat="count",vjust=-.5)+
-  labs(y="Percent",fill="JobLevel")+
-  scale_y_continuous(labels=scales::percent)+
-  facet_grid(~Attrition)
-
-ggplot(rawdata,aes(JobRole,fill=Attrition)) + geom_bar(position="dodge")
-ggplot(rawdata,aes(JobRole, group=Attrition))+
-  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
-  geom_text(aes(label=scales::percent(..prop..),
-                y=..prop..),stat="count",vjust=-.5)+
-  labs(y="Percent",fill="JobRole")+
-  scale_y_continuous(labels=scales::percent)+
-  theme(axis.text.x = element_text(angle=60, hjust=1)) +
-  facet_grid(~Attrition)
-
-ggplot(rawdata,aes(JobSatisfaction,fill=Attrition)) + geom_bar(position="dodge")
-ggplot(rawdata,aes(JobSatisfaction, group=Attrition))+
-  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
-  geom_text(aes(label=scales::percent(..prop..),
-                y=..prop..),stat="count",vjust=-.5)+
-  labs(y="Percent",fill="JobSatisfaction")+
-  scale_y_continuous(labels=scales::percent)+
-  facet_grid(~Attrition)
-
-ggplot(rawdata,aes(MaritalStatus,fill=Attrition)) + geom_bar(position="dodge")
-ggplot(rawdata,aes(MaritalStatus, group=Attrition))+
-  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
-  geom_text(aes(label=scales::percent(..prop..),
-                y=..prop..),stat="count",vjust=-.5)+
-  labs(y="Percent",fill="MaritalStatus")+
-  scale_y_continuous(labels=scales::percent)+
-  facet_grid(~Attrition)
-
-# ggplot(rawdata,aes(MonthlyIncome,fill=Attrition)) + geom_bar(position="dodge")
-# ggplot(rawdata,aes(MonthlyIncome, group=Attrition))+
-#   geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
-#   geom_text(aes(label=scales::percent(..prop..),
-#                 y=..prop..),stat="count",vjust=-.5)+
-#   labs(y="Percent",fill="MonthlyIncome")+
-#   scale_y_continuous(labels=scales::percent)+
-#   facet_grid(~Attrition)
-# 
-# ggplot(rawdata,aes(MonthlyRate,fill=Attrition)) + geom_bar(position="dodge")
-# ggplot(rawdata,aes(MonthlyRate, group=Attrition))+
-#  geom_boxplot()
-#   geom_text(aes(label=scales::percent(..prop..),
-#                 y=..prop..),stat="count",vjust=-.5)+
-#   labs(y="Percent",fill="MonthlyRate")+
-#   scale_y_continuous(labels=scales::percent)+
-#   facet_grid(~Attrition)
-
-
+  ggplot(rawdata,aes(HourlyRate,fill=Attrition)) + geom_bar(position="dodge")
+  ggplot(rawdata,aes(HourlyRate, group=Attrition))+
+    geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+    geom_text(aes(label=scales::percent(..prop..),
+                  y=..prop..),stat="count",vjust=-.5,check_overlap = TRUE)+
+    labs(y="Percent",fill="HourlyRate")+
+    scale_y_continuous(labels=scales::percent)+
+    facet_grid(~Attrition)
   
-#dens <- density(rawdata$MonthlyRate)
-#df <- data.frame(x=dens$x, y=dens$y)
-#probs <- c(0, 0.25, 0.5, 0.75, 1)
-#quantiles <- quantile(rawdata$y, prob=probs)
-#rawdata$quant <- factor(findInterval(df$x,quantiles))
-#ggplot(df, aes(x,y)) + geom_line() + geom_ribbon(aes(ymin=0, ymax=y, fill=quant)) + scale_x_continuous(breaks=quantiles) + scale_fill_brewer(guide="none")
+# jobInvolvementAttrition summary
 
+  ggplot(rawdata,aes(JobInvolvement,fill=Attrition)) + geom_bar(position="dodge")
+  rawdata$JobInvolvement <- factor(rawdata$JobInvolvement,levels = c(1, 2, 3,4), labels = c("Low","Medium","High","Very High"))
+  ggplot(rawdata,aes(JobInvolvement, group=Attrition,fill=JobInvolvement))+
+    geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+    geom_text(aes(label=scales::percent(..prop..),
+                  y=..prop..),stat="count",vjust=-.5)+
+    labs(y="Percent")+
+    scale_y_continuous(labels=scales::percent)+
+    theme(axis.text.x = element_text(angle=60, hjust=1),legend.position="none")+
+    facet_grid(~Attrition)
+
+  # joblevelAttrition Summary
+  ggplot(rawdata,aes(JobLevel,fill=Attrition)) + geom_bar(position="dodge")
+  ggplot(rawdata,aes(JobLevel, group=Attrition))+
+    geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+    geom_text(aes(label=scales::percent(..prop..),
+                  y=..prop..),stat="count",vjust=-.5)+
+    labs(y="Percent")+
+    scale_y_continuous(labels=scales::percent)+
+    theme(axis.text.x = element_text(angle=0, hjust=1),legend.position="none")+
+    facet_grid(~Attrition)
+
+  #jobRoleAttrition Summary
+  ggplot(rawdata,aes(JobRole,fill=Attrition)) + geom_bar(position="dodge")
+  ggplot(rawdata,aes(JobRole, group=Attrition))+
+    geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+    geom_text(aes(label=scales::percent(..prop..),
+                  y=..prop..),stat="count",vjust=-.5)+
+    labs(y="Percent")+
+    scale_y_continuous(labels=scales::percent)+
+    theme(axis.text.x = element_text(angle=60, hjust=1),legend.position="none")+
+    facet_grid(~Attrition)
+
+  #jobsatisfactionAttrition Summary
+  ggplot(rawdata,aes(JobSatisfaction,fill=Attrition)) + geom_bar(position="dodge")
+  rawdata$JobSatisfaction <- factor(rawdata$JobSatisfaction,levels = c(1, 2, 3,4), labels = c("Low","Medium","High","Very High"))
+  ggplot(rawdata,aes(JobSatisfaction, group=Attrition))+
+    geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+    geom_text(aes(label=scales::percent(..prop..),
+                  y=..prop..),stat="count",vjust=-.5)+
+    labs(y="Percent",fill="JobSatisfaction")+
+    scale_y_continuous(labels=scales::percent)+
+    theme(axis.text.x = element_text(angle=60, hjust=1),legend.position="none")+
+    facet_grid(~Attrition)
+
+  #maritalStatusAttrition Summary
+  ggplot(rawdata,aes(MaritalStatus,fill=Attrition)) + geom_bar(position="dodge")
+  ggplot(rawdata,aes(MaritalStatus, group=Attrition))+
+    geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+    geom_text(aes(label=scales::percent(..prop..),
+                  y=..prop..),stat="count",vjust=-.5)+
+    labs(y="Percent")+
+    scale_y_continuous(labels=scales::percent)+
+    theme(axis.text.x = element_text(angle=0, hjust=1),legend.position="none")+
+    facet_grid(~Attrition)
+
+#monthlyRateAttrition Summary
 
 # define the summary function
 f <- function(x) {
@@ -197,36 +185,47 @@ f <- function(x) {
 
 ggplot(rawdata, aes(Attrition, MonthlyRate)) + stat_summary(fun.data = f, geom="boxplot")
 
-
 # define outlier as you want 0-25%  and 75-100% outeliers   
 o <- function(x) {
   subset(x, x < quantile(x)[2] | quantile(x)[4] < x)
 }
 
-# do it
+# MonthlyRate Attrition Boxplot
 ggplot(rawdata, aes(Attrition, MonthlyRate)) + 
   stat_summary(fun.data=f, geom="boxplot") + 
   stat_summary(fun.y = o, geom="point")
-
+# HourlyRate Attrition Boxplot
+ggplot(rawdata, aes(Attrition, HourlyRate)) + 
+  stat_summary(fun.data=f, geom="boxplot") + 
+  stat_summary(fun.y = o, geom="point")
+# MonthlyIncome Attrition Boxplot
 ggplot(rawdata, aes(Attrition, MonthlyIncome)) + 
   stat_summary(fun.data=f, geom="boxplot") + 
   stat_summary(fun.y = o, geom="point")
 
-ggplot(rawdata, aes(Attrition, HourlyRate)) + 
-  stat_summary(fun.data=f, geom="boxplot") + 
-  stat_summary(fun.y = o, geom="point")
+#IncomeGroup vs Attrition Summary
+ggplot(rawdata,aes(IncomeGroup, group=Attrition))+
+  geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
+  geom_text(aes(label=scales::percent(..prop..),
+                y=..prop..),stat="count",vjust=-.5)+
+  labs(y="Percent")+
+  scale_y_continuous(labels=scales::percent)+
+  theme(axis.text.x = element_text(angle=60, hjust=1),legend.position="none")+
+  facet_grid(~Attrition)
 
 
-
+# numberCompaniesWorkedAttrition Summary
 ggplot(rawdata,aes(NumCompaniesWorked,fill=Attrition)) + geom_bar(position="dodge")
 ggplot(rawdata,aes(NumCompaniesWorked, group=Attrition))+
   geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
   geom_text(aes(label=scales::percent(..prop..),
                 y=..prop..),stat="count",vjust=-.5)+
-  labs(y="Percent",fill="NumCompaniesWorked")+
+  labs(y="Percent")+
   scale_y_continuous(labels=scales::percent)+
+  theme(axis.text.x = element_text(angle=0, hjust=1),legend.position="none")+
   facet_grid(~Attrition)
 
+# Age18Attrition Summary
 ggplot(rawdata,aes(Over18,fill=Attrition)) + geom_bar(position="dodge")
 ggplot(rawdata,aes(Over18, group=Attrition))+
   geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
