@@ -26,10 +26,13 @@ ggplot(yacmonthly,aes(x = YearsAtCompany, y = MeanMonthly)) +
 
 
 #code for cross-comparisons with jobsatisfaction, environmentsatisfaction, worklifebalance, relationshipsatisfaction
-RelEnvSat <- lapply(employeeData, function(x){aggregate(EnvironmentSatisfaction~x, data=employeeData, FUN=function(x) c(mean=mean(x), count=length(x)))})
-RelWLB <- lapply(employeeData, function(x){aggregate(WorkLifeBalance~x, data=employeeData, FUN=function(x) c(mean=mean(x), count=length(x)))})
-RelJobSat <- lapply(employeeData, function(x){aggregate(JobSatisfaction~x, data=employeeData, FUN=function(x) c(mean=mean(x), count=length(x)))})
-RelRelSat <- lapply(employeeData, function(x){aggregate(RelationshipSatisfaction~x, data=employeeData, FUN=function(x) c(mean=mean(x), count=length(x)))})
+RelEnvSat <- lapply(rawdata, function(x){aggregate(EnvironmentSatisfaction~x, data=rawdata, FUN=function(x) c(mean=mean(x), count=length(x)))})
+RelWLB <- lapply(rawdata, function(x){aggregate(WorkLifeBalance~x, data=rawdata, FUN=function(x) c(mean=mean(x), count=length(x)))})
+RelJobSat <- lapply(rawdata, function(x){aggregate(JobSatisfaction~x, data=rawdata, FUN=function(x) c(mean=mean(x), count=length(x)))})
+RelRelSat <- lapply(rawdata, function(x){aggregate(RelationshipSatisfaction~x, data=rawdata, FUN=function(x) c(mean=mean(x), count=length(x)))})
+
+
+
 
 #notes on significant comparisons
 #RelEnvSat:6,16
