@@ -17,7 +17,6 @@ rawdata.xls <- "data/CaseStudy2-data.xlsx"
 rawdata.csv <- "data/original.csv"
 
 refine <- read_excel(rawdata.xls,1)
-View(refine)
 refine %>% data.table::fwrite(rawdata.csv)
 dframe <- read.csv(rawdata.csv)
 rawdata <- dframe
@@ -427,7 +426,7 @@ ggplot(mjobrole.df, aes(x=JobRole, y=YearsWithCompany,fill=JobRole)) +
 #  coord_polar("y",start=0)
 
 
-boxplot(quantile(cleandata$Age),col="red", horizontal = TRUE,xlab="Age")
+#boxplot(quantile(cleandata$Age),col="red", horizontal = TRUE,xlab="Age")
 
 ggplot(rawdata,aes(IncomeGroup, group=Attrition))+
   geom_bar(aes(y=..prop..,fill=factor(..x..)),stat="count")+
